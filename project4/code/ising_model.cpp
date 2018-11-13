@@ -22,7 +22,7 @@ using namespace std;
 using namespace arma;
 
 // output file
-ofstream ofile;
+ofstream ofile("/results/");
 
 // Defining various functions we call in the main program
 
@@ -62,9 +62,9 @@ int main(int argc, char* argv[])
   }
   // Declare new file name and add lattice size to file name
   string fileout = filename;
-  string argument = to_string(NSpins);
+  string argument = "_" + to_string(NSpins) + "_" + to_string(MCcycles);
   fileout.append(argument);
-  ofile.open(fileout);
+  ofile.open("results/nopara/" + fileout);
   // Start Monte Carlo sampling by looping over the selected Temperatures
   for (double Temperature = InitialTemp; Temperature <= FinalTemp; Temperature += TempStep) {
     vec ExpectationValues = zeros<mat>(5);
