@@ -1,0 +1,169 @@
+\documentclass[a4paper, fontsize=11pt]{article}
+
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage[english]{babel} % English language/hyphenation
+%\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{pgfplotstable, booktabs, mathpazo}
+
+
+\usepackage[colorlinks=true,linkcolor=black,urlcolor=blue,
+citecolor=blue]{hyperref}
+
+%\bibliographystyle{ieeetr}
+\bibliographystyle{apalike}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+
+\lstset{frame=tb,
+  language=C++,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\pgfplotstableset{
+    every head row/.style={before row=\toprule,after row=\midrule},
+    every last row/.style={after row=\bottomrule}
+}
+
+\begin{document}
+
+\title{Project 4 FYS4150 \\ Phase transitions in magnetic systems}
+\author{Marius Holm}
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+\maketitle
+
+
+\section{Abstract}
+We give a brief introduction to differential equations and how we can discretize such equations in order to solve them using computer algorithms. We then introduce the most important equations we meet in our project, namely Newton's law of gravitation, and Newton's second law of motion on differential form. In table \ref{PlanetMass} we present the masses and distance from the Sun of all the planets in our solar system. We choose to scale our equations in such a way that the mass of the Sun is $M_{\odot}\overset{\text{def}}{=} 1$, and as such we also need the masses of the planets given in the same unit.
+
+
+\paragraph{}
+We find an analytical expression for the escape velocity needed for a planet to escape the gravitational pull of the Sun, $v_{e} = 2\sqrt{2} \, \pi$. We then present plots of Mercury's perihelion precession and how Mercury's orbit around the Sun is affected by general relativity.
+
+
+\paragraph{}
+The rest of our results can be found in the GitHub repository linked in the implementation section. 
+
+\section{Introduction}
+In this project we will study the Ising model in two dimensions as a model of phase transitions. At a given critical temperature, this model exhibits a phase transition from a magnetic phase to a phase with zero magnetization. This is a so-called binary system where each object on the lattice can only take two values. In our system we will use spins that either point up or down. We can for example choose to associate spins pointing up with 1, and spins pointing down with 0. 
+
+\paragraph{}
+In it's simplest form the energy of the Ising model is expressed as, without an externally applied magnetic field,
+
+\begin{equation}
+E = -J \sum^N_{<kl>} s_{k} s_{l},
+\end{equation}
+
+with $s_{k}=\pm 1$. $N$ is the total number of spins in our system and $J$ is a coupling constant expressing the strength of the interaction between neighboring spins. The symbol $<kl>$ indicates that we sum over the nearest neighbors only. For non-neighboring spins the interaction is so weak that we often can ignore this contribution. We also assume that we have ferromagnetic ordering in our system, by assuming $J> 0$. For this project we'll use periodic boundary conditions and the Metropolis algorithm.
+
+
+\paragraph{}
+We give a brief introduction to the Ising model as well as phase transitions near the critical temperature. For a simple system of $2 \times 2$ spins, $L = 2$ we present the analytical expressions for the partition function and the corresponding expectation values for the energy $E$, the mean absolute value of the magnetic moment $\lvert M \rvert$ (we refer to this as the mean magnetization), the specific heat $C_{V}$ and the susceptibility $\chi$ as functions of $T$ using periodic boundary conditions. We then present and discuss the numerical results obtained from our code.
+
+
+
+\section{Methods}
+
+
+
+
+\subsection{Monte Carlo}
+
+
+
+\subsection{Ising model}
+
+
+
+
+\subsubsection{Euler's forward algorithm}
+
+
+\subsubsection{Euler's method specific}
+
+
+
+\subsubsection{Velocity Verlet method}
+
+
+
+\subsection{Implementation}
+
+In our implementation of the abovementioned methods we use a more general scheme which allows us to implement any given formula for the acceleration. Thus we are not limited to the specified acceleration derived from circular motion, but have the opportunity to add other terms as well. 
+
+
+\paragraph{}
+All our code, calculations, and plots used can be found in \href{https://github.com/auduntre/FYS4150/tree/master/Project%203}{Auduns GitHub repository}.
+
+\section{Results}
+
+
+\subsection{Analytic expressions}
+We assume we have a system of two spins in each dimension, denoted as $L = 2$, with periodic boundary conditions. We wish to analytic results for 
+
+\paragraph{}
+For a square lattice with periodic boundary conditions we have $2^4 = 16$ states. \cite{H-Jensen}
+
+\subsection{FLOPS}
+
+
+
+
+\subsection{Escape velocity}
+
+
+
+
+
+
+\subsection{Perihelion precession of Mercury}
+
+
+
+
+\subsection{Method stability} 
+
+
+
+
+As we can see from figures \ref{fig:Verlet} and \ref{fig:Euler}, we can achieve pretty nice results using both Euler's forward algorithm as well as the velocity Verlet algorithm. However we notice that in order to get a nice circular orbit we need 100 times more timesteps for Euler's method compared to velocity Verlet. I.e. in order to avoid divergence, Euler's method requires significantly more time steps.
+
+
+%\paragraph{}
+%Testing Anders' code for automatic inclusion of data to table.
+%\begin{table}[h!t
+%    \centering
+%    \caption{The greatest table.}
+%    \pgfplotstabletypeset[sci]{error.dat}
+%\end{table}
+
+\section{Conclusions}
+
+The results found using numerical methods with general relativity correction terms fit very well with known theory. We did not have the time to expand our code to a full solar system with all the planets, which would have been interesting to look at given we had more time.
+
+
+
+\bibliography{references}
+\end{document}
