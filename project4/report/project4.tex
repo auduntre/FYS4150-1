@@ -9,6 +9,8 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{pgfplotstable, booktabs, mathpazo}
+\usepackage{diagbox}
+\usepackage{multirow}
 
 
 \usepackage[colorlinks=true,linkcolor=black,urlcolor=blue,
@@ -121,10 +123,54 @@ All our code, calculations, and plots used can be found in \href{https://github.
 
 
 \subsection{Analytic expressions}
-We assume we have a system of two spins in each dimension, denoted as $L = 2$, with periodic boundary conditions. We wish to analytic results for 
+We assume we have a system of two spins in each dimension, denoted as $L = 2$, with periodic boundary conditions. For a square lattice with periodic boundary conditions we have $2^4 = 16$ states. 
 
-\paragraph{}
-For a square lattice with periodic boundary conditions we have $2^4 = 16$ states. 
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|| >{\centering}m{1cm}| >{\centering}m{1cm}| >{\centering}m{1cm}| >{\centering}m{1cm}|}
+\toprule
+\multicolumn{5}{c}{Spin configurations}
+%Spin configurations
+\\ \hline
+\diagbox{$k$}{$j$} & $1$ & $2$ & $3$ & $4$
+\tabularnewline
+\hline
+\multirow{2}{*}{$1$} & $\uparrow \uparrow$ & $\uparrow \uparrow$ & 
+$\uparrow \uparrow$ & $\uparrow \uparrow$ 
+\tabularnewline
+& $\uparrow \uparrow$ & $\uparrow \downarrow$ & 
+$\downarrow \uparrow$ & $\downarrow \downarrow$
+\tabularnewline
+\hline
+\multirow{2}{*}{$2$} & $\uparrow \downarrow$ & $\uparrow \downarrow$ & 
+$\uparrow \downarrow$ & $\uparrow \downarrow$ 
+\tabularnewline
+& $\uparrow \uparrow$ & $\uparrow \downarrow$ & 
+$\downarrow \uparrow$ & $\downarrow \downarrow$
+\tabularnewline
+\hline
+\multirow{2}{*}{$3$} & $\downarrow \uparrow$ & $\downarrow \uparrow$ & 
+$\downarrow \uparrow$ & $\downarrow \uparrow$ 
+\tabularnewline
+& $\uparrow \uparrow$ & $\uparrow \downarrow$ & 
+$\downarrow \uparrow$ & $\downarrow \downarrow$
+\tabularnewline
+\hline
+\multirow{2}{*}{$4$} & $\downarrow \downarrow$ & $\downarrow \downarrow$ & 
+$\downarrow \downarrow$ & $\downarrow \downarrow$ 
+\tabularnewline
+& $\uparrow \uparrow$ & $\uparrow \downarrow$ & 
+$\downarrow \uparrow$ & $\downarrow \downarrow$
+\tabularnewline \hline
+\end{tabular}
+\caption{Spin configurations for a $2 \times 2$ system.}
+\label{spinconfig}
+\end{table}
+
+
+
+
 
 In order to calculate the expectation values for the mean energy $\langle E \rangle$ and the mean magnetization $\langle \mathcal{M} \rangle$ in statistical physics at a given temperature, we need a probability distribution
 
@@ -144,13 +190,96 @@ where the sum extends over all microstates $M$.
 With periodic boundary conditions the energy for a given configuration $i$ is given by
 
 \begin{equation}
-E_{i} = \sum^N_{j=1} s_{j} s_{j+1}.
+E_{i} = \sum^N_{j=1} s_{j} s_{j+1}. 
 \end{equation}
 
-The expectation value for the energy is given by 
+For details on the calculations and more theoretical background please see. \cite{H-Jensen}
+
+\paragraph{}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c||c|r|r|}
+\toprule
+\multicolumn{4}{c}{Energy and magnetization}
+%Spin configurations
+\\ \hline
+Spins $\uparrow$ & Degeneracy & $E$ & $\mathcal{M}$
+\tabularnewline
+\hline
+4 & 1 & $-8$ J & $4$
+\tabularnewline \hline
+3 & 4 & $0$ & $2$
+\tabularnewline \hline
+2 & 4 & $0$  & $0$
+\tabularnewline \hline
+2 & 2 & $8$ J & $0$
+\tabularnewline \hline
+1 & 4 & $0$  & $-2$
+\tabularnewline \hline
+0 & 1 & $-8$ J & $-4$
+\tabularnewline \hline
+\end{tabular}
+\caption{Energy and magnetization of the different spin configurations described in table \ref{spinconfig}.}
+\label{EM}
+\end{table}
+
+We can now find an analytic expression for the partition function for our $2 \times 2$ system. We have $M = 16$ different configurations. For the different configurations we have two configurations with $E = -8 \, \text{J}$, two with $E = 8 \, \text{J}$, and $12$ of $E=0$. Thus we have
 
 \begin{equation}
-\langle E \rangle = \sum^M_{i=1} E_{i} \, P_{i}(\beta) = \dfrac{1}{Z} \sum^M_{i=1} E_{i} \, e^{-\beta E_{i}}
+Z = 2 e^{-8\, \text{J} \, \beta} + 2 e^{8 \,\text{J} \, \beta} + 12,
+\end{equation}
+
+where the first term is a result from the two configurations $j,k=1,1$ and $j,k = 4,4$. The second term comes from configurations $j,k = 3,2$ and $j,k = 2,3$, while the last term is the contribution from the rest of the configurations with $E=0$.
+
+\paragraph{}
+The corresponding expectation values for the energy is given by
+
+\begin{equation}
+\langle E \rangle = \sum^M_{i=1} E_{i} \, P_{i}(\beta) = \sum^M_{i=1} E_{i} \, \dfrac{e^{-\beta \, E_{i}}}{Z} = -\dfrac{J}{Z} \left(16 e^{8 \, \text{J} \, \beta} - 16 e^{-8 \, \text{J} \, \beta} \right)
+\end{equation}
+
+The variance is defined as
+
+\begin{equation}
+\sigma^2_{E} = \left( \langle E^2 \rangle - \langle E \rangle^2 \right) = \dfrac{1}{Z} \sum^M_{i=1} E_{i}^2 \, e^{-\beta \, E_{i}} - \left( \dfrac{1}{Z} \sum^M_{i=1} E_{i} \, e^{-\beta \, E_{i}} \right)^2
+\end{equation}
+
+We use this result in order to find the specific heat  $C_{V}$ as
+
+\begin{equation}
+C_{V} = \dfrac{1}{k_{B} \, T^2} \left( \langle E^2 \rangle - \langle E \rangle^2 \right)
+\end{equation}
+
+\paragraph{}
+The mean absolute magnetization $\langle \mathcal{M} \rangle$ can be calculated as
+
+\begin{equation}
+\langle \mathcal{M} \rangle = \sum^M_{i=1} \mathcal{M}_{i} \, P_{i}(\beta) = \dfrac{1}{Z} \sum^M_{i=1} \mathcal{M}_{i} \, e^{-\beta \, E_{i}}
+\end{equation}
+
+where $\mathcal{M}_{i}$ is the magnetization for a given configuration $i$ calculated as
+
+\begin{equation}
+\mathcal{M}_{i} = \sum^N_{j=1} s_{j}
+\end{equation}
+
+where we sum over each spin in the lattice, counting up spins as $+1$ and down spins as $-1$. The magnetization of each "equivalent" configuration is given in table \ref{EM}. As such we can calculate $\langle \mathcal{M} \rangle$ as
+
+\begin{equation}
+\langle \mathcal{M} \rangle = \dfrac{1}{Z} \left( 4 \, e^{8 \, \text{J} \, \beta} + 4 (2 \, e^0) + 4 ( -2 \, e^0) -4 \, e^{8 \, \text{J} \, \beta} \right) = 0
+\end{equation}
+
+The variance is defined as 
+
+\begin{equation}
+\sigma^2_{\mathcal{M}} = \left( \langle \mathcal{M}^2 \rangle - \langle \mathcal{M} \rangle^2 \right) = \dfrac{1}{Z} \sum^M_{i=1} \mathcal{M}_{i}^2 \, e^{-\beta \, E_{i}} - \left( \dfrac{1}{Z} \sum^M_{i=1} \mathcal{M}_{i} \, e^{-\beta \, E_{i}} \right)^2
+\end{equation}
+
+We use this result in order to calculate the susceptibility $\chi$ as
+
+\begin{equation}
+\chi = \dfrac{1}{k_{B} \, T} \left( \langle \mathcal{M}^2 \rangle - \langle \mathcal{M} \rangle^2 \right)
 \end{equation}
 
 
