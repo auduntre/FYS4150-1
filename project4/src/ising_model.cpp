@@ -52,10 +52,10 @@ int main(int argc, char* argv[])
         MetropolisSampling(NSpins, MCcycles, Temperature, ExpectationValues);
         
         //
-        WriteResultstoFile(NSpins, MCcycles, Temperature, ExpectationValues);
+        WriteResultstoFile(ofile, NSpins, MCcycles, Temperature, ExpectationValues);
     }
+
     ofile.close(); // close output file
     return 0;
     // end of main program
 }
-

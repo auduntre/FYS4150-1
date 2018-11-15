@@ -23,6 +23,6 @@ void InitializeLattice(int, mat &, double&, double&);
 void MetropolisSampling(int NSpins, int MCcycles, double Temperature, vec &ExpectationValues);
 
 // prints to file the results of the calculations
-void WriteResultstoFile(int NSpins, int MonteCarloCycles, double temperature, vec ExpectationValues)
+void WriteResultstoFile(ofstream &ofile, int NSpins, int MonteCarloCycles, double temperature, vec ExpectationValues);
 
 #endif
