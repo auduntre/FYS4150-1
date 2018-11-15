@@ -58,21 +58,19 @@ void MetropolisSampling(int NSpins, int MCcycles, double Temperature, vec &Expec
     // Start Monte Carlo cycles
     for (int cycles = 1; cycles <= MCcycles; cycles++){
         // The sweep over the lattice, looping over all spin sites
-        for(int x = 0; x < NSpins; x++) {
-            for (int y = 0; y < NSpins; y++) {
-                int ix = (int) (RandomNumberGenerator(gen) * (double)NSpins);
-            	int iy = (int) (RandomNumberGenerator(gen) * (double)NSpins);
-            	int deltaE = 2 * SpinMatrix(ix, iy)
-                             * (SpinMatrix(ix, PeriodicBoundary(iy, NSpins, -1))
-                                + SpinMatrix(PeriodicBoundary(ix, NSpins, -1), iy)
-            	                + SpinMatrix(ix, PeriodicBoundary(iy, NSpins, 1))
-            	                + SpinMatrix(PeriodicBoundary(ix, NSpins, 1), iy));
+        for (int xy = 0; xy < NSpins * NSpins; xy ++) {
+            int ix = (int) (RandomNumberGenerator(gen) * (double)NSpins);
+            int iy = (int) (RandomNumberGenerator(gen) * (double)NSpins);
+            int deltaE = 2 * SpinMatrix(ix, iy)
+                         * (SpinMatrix(ix, PeriodicBoundary(iy, NSpins, -1))
+                            + SpinMatrix(PeriodicBoundary(ix, NSpins, -1), iy)
+            	            + SpinMatrix(ix, PeriodicBoundary(iy, NSpins, 1))
+            	            + SpinMatrix(PeriodicBoundary(ix, NSpins, 1), iy));
 
-                if ( RandomNumberGenerator(gen) <= EnergyDifference(deltaE + 8) ) {
-              	    SpinMatrix(ix,iy) *= -1.0;  // flip one spin and accept new spin config
-              	    MagneticMoment += (double) (2.0 * SpinMatrix(ix, iy));
-              	    Energy += (double) deltaE;
-            	}
+            if ( RandomNumberGenerator(gen) <= EnergyDifference(deltaE + 8) ) {
+              	SpinMatrix(ix,iy) *= -1.0;  // flip one spin and accept new spin config
+              	MagneticMoment += (double) (2.0 * SpinMatrix(ix, iy));
+              	Energy += (double) deltaE;
             }
         }
         
