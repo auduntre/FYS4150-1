@@ -26,7 +26,7 @@ using namespace arma;
 ofstream ofile("/results/");
 
 // Main program begins here
-int main(int argc, char* argv[])
+int main (int argc, char* argv[])
 {
     string filename;
     int NSpins, MonteCarloCycles;

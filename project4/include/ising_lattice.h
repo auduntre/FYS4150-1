@@ -14,15 +14,15 @@ using namespace std;
 using namespace arma;
 
 // inline function for PeriodicBoundary boundary conditions
-inline int PeriodicBoundary(int i, int limit, int add);
+inline int PeriodicBoundary (int i, int limit, int add);
 
 // Function to initialise energy and magnetization
-void InitializeLattice(int, mat &, double&, double&);
+void InitializeLattice (int NSpins, mat &SpinMatrix,  double& Energy, double& MagneticMoment);
 
 // The metropolis algorithm including the loop over Monte Carlo cycles
-void MetropolisSampling(int NSpins, int MCcycles, double Temperature, vec &ExpectationValues);
+void MetropolisSampling (int NSpins, int MCcycles, double Temperature, vec &ExpectationValues);
 
 // prints to file the results of the calculations
-void WriteResultstoFile(ofstream &ofile, int NSpins, int MonteCarloCycles, double temperature, vec ExpectationValues);
+void WriteResultstoFile (ofstream &ofile, int NSpins, int MonteCarloCycles, double temperature, vec ExpectationValues);
 
 #endif

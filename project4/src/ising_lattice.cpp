@@ -4,13 +4,13 @@ using namespace std;
 using namespace arma;
 
 
-inline int PeriodicBoundary(int i, int limit, int add) {
+inline int PeriodicBoundary (int i, int limit, int add) {
     return (i+limit+add) % (limit);
 }
 
 
 // function to initialise energy, spin matrix and magnetization
-void InitializeLattice(int NSpins, mat &SpinMatrix,  double& Energy, double& MagneticMoment)
+void InitializeLattice (int NSpins, mat &SpinMatrix,  double& Energy, double& MagneticMoment)
 {
   // setup spin matrix and initial magnetization
     for(int x =0; x < NSpins; x++) {
@@ -32,7 +32,7 @@ void InitializeLattice(int NSpins, mat &SpinMatrix,  double& Energy, double& Mag
 
 
 // The Monte Carlo part with the Metropolis algo with sweeps over the lattice
-void MetropolisSampling(int NSpins, int MCcycles, double Temperature, vec &ExpectationValues)
+void MetropolisSampling (int NSpins, int MCcycles, double Temperature, vec &ExpectationValues)
 {
     // Initialize the seed and call the Mersienne algo
     std::random_device rd;
@@ -84,7 +84,7 @@ void MetropolisSampling(int NSpins, int MCcycles, double Temperature, vec &Expec
 }
 
 
-void WriteResultstoFile(ofstream &ofile, int NSpins, int MonteCarloCycles, double temperature, vec ExpectationValues)
+void WriteResultstoFile (ofstream &ofile, int NSpins, int MonteCarloCycles, double temperature, vec ExpectationValues)
 {
     double norm = 1.0 / ((double) (MonteCarloCycles));  // divided by  number of cycles
     double E_ExpectationValues = ExpectationValues(0) * norm;
@@ -100,9 +100,9 @@ void WriteResultstoFile(ofstream &ofile, int NSpins, int MonteCarloCycles, doubl
     
     ofile << setiosflags(ios::showpoint | ios::uppercase);
     ofile << setw(15) << setprecision(8) << temperature;
-    ofile << setw(15) << setprecision(8) << E_ExpectationValues*AllSpins;
+    ofile << setw(15) << setprecision(8) << E_ExpectationValues * AllSpins;
     ofile << setw(15) << setprecision(8) << HeatCapacity;
-    ofile << setw(15) << setprecision(8) << M_ExpectationValues*AllSpins;
+    ofile << setw(15) << setprecision(8) << M_ExpectationValues * AllSpins;
     ofile << setw(15) << setprecision(8) << MagneticSusceptibility;
-    ofile << setw(15) << setprecision(8) << Mabs_ExpectationValues*AllSpins << endl;
+    ofile << setw(15) << setprecision(8) << Mabs_ExpectationValues * AllSpins << endl;
 }

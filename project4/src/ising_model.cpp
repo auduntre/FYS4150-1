@@ -17,7 +17,7 @@ using namespace arma;
 // output file
 ofstream ofile("/results/");
 
-int main(int argc, char* argv[])
+int main (int argc, char* argv[])
 {
     string filename;
     int NSpins, MCcycles;
