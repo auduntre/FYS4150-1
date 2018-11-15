@@ -124,7 +124,37 @@ All our code, calculations, and plots used can be found in \href{https://github.
 We assume we have a system of two spins in each dimension, denoted as $L = 2$, with periodic boundary conditions. We wish to analytic results for 
 
 \paragraph{}
-For a square lattice with periodic boundary conditions we have $2^4 = 16$ states. \cite{H-Jensen}
+For a square lattice with periodic boundary conditions we have $2^4 = 16$ states. 
+
+In order to calculate the expectation values for the mean energy $\langle E \rangle$ and the mean magnetization $\langle \mathcal{M} \rangle$ in statistical physics at a given temperature, we need a probability distribution
+
+\begin{equation}
+P_{i}(\beta) = \dfrac{e^{-\beta E_{i}}}{Z}
+\end{equation}
+
+which is known as the Boltzmann distribution with $\beta = 1/kT$, where $k$ is the Boltzmann constant, $E_{i}$ the energy of a state $i$, and $Z$ is the partition function for the canonical esemble defined as 
+
+\begin{equation}
+Z = \sum^M_{i=1} e^{-\beta E_{i}}
+\end{equation}
+
+where the sum extends over all microstates $M$. 
+
+\paragraph{}
+With periodic boundary conditions the energy for a given configuration $i$ is given by
+
+\begin{equation}
+E_{i} = \sum^N_{j=1} s_{j} s_{j+1}.
+\end{equation}
+
+The expectation value for the energy is given by 
+
+\begin{equation}
+\langle E \rangle = \sum^M_{i=1} E_{i} \, P_{i}(\beta) = \dfrac{1}{Z} \sum^M_{i=1} E_{i} \, e^{-\beta E_{i}}
+\end{equation}
+
+
+\cite{H-Jensen}
 
 \subsection{FLOPS}
 
