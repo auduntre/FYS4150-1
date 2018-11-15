@@ -17,7 +17,6 @@
 
 // Remember to make sure to have the right directory for YOUR system
 #include "/usr/lib/x86_64-linux-gnu/openmpi/include/mpi.h"
-
 #include "ising_lattice.h"
 
 using namespace  std;
@@ -25,20 +24,6 @@ using namespace arma;
 
 // output file
 ofstream ofile("/results/");
-
-// inline function for PeriodicBoundary boundary conditions
-inline int PeriodicBoundary(int i, int limit, int add) {
-    return (i+limit+add) % (limit);
-}
-
-// Function to initialise energy and magnetization
-void InitializeLattice(int, mat &, double&, double&);
-
-// The metropolis algorithm including the loop over Monte Carlo cycles
-void MetropolisSampling(int, int, double, vec &);
-
-// prints to file the results of the calculations
-void WriteResultstoFile(int, int, double, vec);
 
 // Main program begins here
 int main(int argc, char* argv[])
