@@ -1,6 +1,5 @@
 #include "ising_lattice.h"
 
-
 using namespace std;
 using namespace arma;
 
@@ -8,7 +7,6 @@ using namespace arma;
 inline int PeriodicBoundary(int i, int limit, int add) {
     return (i+limit+add) % (limit);
 }
-
 
 
 // function to initialise energy, spin matrix and magnetization
@@ -86,7 +84,6 @@ void MetropolisSampling(int NSpins, int MCcycles, double Temperature, vec &Expec
         ExpectationValues(4) += fabs(MagneticMoment);
     }
 }
-
 
 
 void WriteResultstoFile(ofstream &ofile, int NSpins, int MonteCarloCycles, double temperature, vec ExpectationValues)
