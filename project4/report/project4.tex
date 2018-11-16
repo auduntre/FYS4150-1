@@ -58,7 +58,7 @@ citecolor=blue]{hyperref}
 
 
 \section{Abstract}
-We give a brief introduction to differential equations and how we can discretize such equations in order to solve them using computer algorithms. We then introduce the most important equations we meet in our project, namely Newton's law of gravitation, and Newton's second law of motion on differential form. In table \ref{PlanetMass} we present the masses and distance from the Sun of all the planets in our solar system. We choose to scale our equations in such a way that the mass of the Sun is $M_{\odot}\overset{\text{def}}{=} 1$, and as such we also need the masses of the planets given in the same unit.
+We give a brief introduction to the Ising model in 1 and 2 dimensions, as well as Monte Carlo integration. and how we can discretize such equations in order to solve them using computer algorithms. We then introduce the most important equations we meet in our project, namely Newton's law of gravitation, and Newton's second law of motion on differential form. In table \ref{PlanetMass} we present the masses and distance from the Sun of all the planets in our solar system. We choose to scale our equations in such a way that the mass of the Sun is $M_{\odot}\overset{\text{def}}{=} 1$, and as such we also need the masses of the planets given in the same unit.
 
 
 \paragraph{}
@@ -251,6 +251,24 @@ We use this result in order to find the specific heat  $C_{V}$ as
 C_{V} = \dfrac{1}{k_{B} \, T^2} \left( \langle E^2 \rangle - \langle E \rangle^2 \right)
 \end{equation}
 
+\begin{align}
+\langle E^2 \rangle &= \dfrac{1}{Z} \sum^M_{i=1} E_{i}^2 \, e^{-\beta \, E_{i}} = \dfrac{1}{Z} \left( 2 \cdot \left( -8 \text{J} \right)^2 \, e^{8 \, \text{J} \, \beta} + 2 \cdot \left( 8 \text{J} \right)^2 \, e^{-8 \, \text{J} \, \beta} \right)
+\\
+&= \dfrac{\text{J}^2}{Z} \left( 128 \, e^{8 \, \text{J} \, \beta} + 128 \, e^{-8 \, \text{J} \, \beta} \right)
+\end{align}
+
+
+\begin{align}
+C_{V} &= \dfrac{1}{k_{B} \, T^2} \left( \dfrac{\text{J}^2}{Z} \left( 128 \, e^{8 \, \text{J} \, \beta} + 128 \, e^{-8 \, \text{J} \, \beta} \right) - \left(-\dfrac{\text{J}}{Z} \left(16 \, e^{8 \, \text{J} \, \beta} - 16 \, e^{-8 \, \text{J} \, \beta} \right) \right)^2 \right)
+\\
+&= 
+\dfrac{1}{k_{B} \, T^2} \left( \dfrac{\text{J}^2}{Z} \left( 128 \, e^{8 \, \text{J} \, \beta} + 128 \, e^{-8 \, \text{J} \, \beta} \right) 
+- 
+\dfrac{\text{J}^2}{Z^2} \left(256 \, e^{16 \, \text{J} \, \beta} - 512 + 256 \, e^{-16 \, \text{J} \, \beta} \right) \right) 
+\end{align}
+
+
+
 \paragraph{}
 The mean absolute magnetization $\langle \mathcal{M} \rangle$ can be calculated as
 
@@ -276,11 +294,22 @@ The variance is defined as
 \sigma^2_{\mathcal{M}} = \left( \langle \mathcal{M}^2 \rangle - \langle \mathcal{M} \rangle^2 \right) = \dfrac{1}{Z} \sum^M_{i=1} \mathcal{M}_{i}^2 \, e^{-\beta \, E_{i}} - \left( \dfrac{1}{Z} \sum^M_{i=1} \mathcal{M}_{i} \, e^{-\beta \, E_{i}} \right)^2
 \end{equation}
 
+\begin{align}
+\langle \mathcal{M}^2 \rangle &= \dfrac{1}{Z} \left( 4^2 \, e^{8 \, \text{J} \, \beta} + 4 \, (2^2 \, e^0 ) + 4 \, ((-2)^2 \, e^0) + (-4)^2 \, e^{8 \, \text{J} \, \beta} \right) 
+\\
+&=\dfrac{1}{Z} \left( 16 \, e^{8 \, \text{J} \, \beta} + 32 + 16 \, e^{8 \, \text{J} \, \beta} \right) 
+\end{align}
+
 We use this result in order to calculate the susceptibility $\chi$ as
 
-\begin{equation}
-\chi = \dfrac{1}{k_{B} \, T} \left( \langle \mathcal{M}^2 \rangle - \langle \mathcal{M} \rangle^2 \right)
-\end{equation}
+\begin{align}
+\chi &= \dfrac{1}{k_{B} \, T} \left( \langle \mathcal{M}^2 \rangle - \langle \mathcal{M} \rangle^2 \right)
+\\
+&=\dfrac{1}{k_{B} \, T} \left( \dfrac{1}{Z} \left( 16 \, e^{8 \, \text{J} \, \beta} + 32 + 16 \, e^{8 \, \text{J} \, \beta} \right)  - 0^2 \right)
+\\
+&= 
+\dfrac{1}{k_{B} \, T \, Z} \left( 16 \, e^{8 \, \text{J} \, \beta} + 32 + 16 \, e^{8 \, \text{J} \, \beta} \right) 
+\end{align}
 
 
 \cite{H-Jensen}
