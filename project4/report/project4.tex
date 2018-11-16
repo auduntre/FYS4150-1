@@ -8,9 +8,22 @@
 \usepackage{verbatim}
 \usepackage{graphicx}
 \usepackage{float}
-\usepackage{pgfplotstable, booktabs, mathpazo}
 \usepackage{diagbox}
 \usepackage{multirow}
+
+\usepackage{pgfplotstable, booktabs, mathpazo}
+
+\pgfplotstableset{
+    every head row/.style={before row=\toprule,after row=\midrule},
+    every last row/.style={after row=\bottomrule},
+%    alias/{$T$}/.initial=0,
+%    alias/{$E$}/.initial=1,
+%    alias/{$C_V$}/.initial=2,
+%    alias/{$M$}/.initial=3,
+%    alias/{$chi$}/.initial=4,
+%    alias/{$abs(M)$}/.initial=5,
+}
+
 
 
 \usepackage[colorlinks=true,linkcolor=black,urlcolor=blue,
@@ -41,10 +54,6 @@ citecolor=blue]{hyperref}
   tabsize=3
 }
 
-\pgfplotstableset{
-    every head row/.style={before row=\toprule,after row=\midrule},
-    every last row/.style={after row=\bottomrule}
-}
 
 \begin{document}
 
@@ -236,10 +245,9 @@ where the first term is a result from the two configurations $j,k=1,1$ and $j,k 
 The corresponding expectation values for the energy is given by
 
 \begin{equation}
-\langle E \rangle = \sum^M_{i=1} E_{i} \, P_{i}(\beta) = \sum^M_{i=1} E_{i} \, \dfrac{e^{-\beta \, E_{i}}}{Z} = -\dfrac{J}{Z} \left(16 e^{8 \, \text{J} \, \beta} - 16 e^{-8 \, \text{J} \, \beta} \right)
-\end{equation}
-
-The variance is defined as
+\langle E \rangle = \sum^M_{i=1} E_{i} \, P_{i}(\beta) = \sum^M_{i=1} E_{i} \, \dfrac{e^{-\beta \, E_{i}}}{Z} = -\dfrac{J}{Z} \left(16\, e^{8 \, \text{J} \, (k \, T)^{-1}} - 16 \, e^{-8 \, \text{J} \, (k \, T)^{-1}} \right)
+\end{equation} 
+I replace $\beta = (k \, T)^{-1}$ in the results in order to make it clearer to myself and the reader that they are functions of $T$. The variance is defined as
 
 \begin{equation}
 \sigma^2_{E} = \left( \langle E^2 \rangle - \langle E \rangle^2 \right) = \dfrac{1}{Z} \sum^M_{i=1} E_{i}^2 \, e^{-\beta \, E_{i}} - \left( \dfrac{1}{Z} \sum^M_{i=1} E_{i} \, e^{-\beta \, E_{i}} \right)^2
@@ -262,9 +270,9 @@ C_{V} = \dfrac{1}{k_{B} \, T^2} \left( \langle E^2 \rangle - \langle E \rangle^2
 C_{V} &= \dfrac{1}{k_{B} \, T^2} \left( \dfrac{\text{J}^2}{Z} \left( 128 \, e^{8 \, \text{J} \, \beta} + 128 \, e^{-8 \, \text{J} \, \beta} \right) - \left(-\dfrac{\text{J}}{Z} \left(16 \, e^{8 \, \text{J} \, \beta} - 16 \, e^{-8 \, \text{J} \, \beta} \right) \right)^2 \right)
 \\
 &= 
-\dfrac{1}{k_{B} \, T^2} \left( \dfrac{\text{J}^2}{Z} \left( 128 \, e^{8 \, \text{J} \, \beta} + 128 \, e^{-8 \, \text{J} \, \beta} \right) 
+\dfrac{1}{k_{B} \, T^2} \left( \dfrac{\text{J}^2}{Z} \left( 128 \, e^{8 \, \text{J} \, (k \, T)^{-1}} + 128 \, e^{-8 \, \text{J} \, (k \, T)^{-1}} \right) 
 - 
-\dfrac{\text{J}^2}{Z^2} \left(256 \, e^{16 \, \text{J} \, \beta} - 512 + 256 \, e^{-16 \, \text{J} \, \beta} \right) \right) 
+\dfrac{\text{J}^2}{Z^2} \left(256 \, e^{16 \, \text{J} \, (k \, T)^{-1}} - 512 + 256 \, e^{-16 \, \text{J} \, (k \, T)^{-1}} \right) \right) 
 \end{align}
 
 
@@ -297,7 +305,7 @@ The variance is defined as
 \begin{align}
 \langle \mathcal{M}^2 \rangle &= \dfrac{1}{Z} \left( 4^2 \, e^{8 \, \text{J} \, \beta} + 4 \, (2^2 \, e^0 ) + 4 \, ((-2)^2 \, e^0) + (-4)^2 \, e^{8 \, \text{J} \, \beta} \right) 
 \\
-&=\dfrac{1}{Z} \left( 16 \, e^{8 \, \text{J} \, \beta} + 32 + 16 \, e^{8 \, \text{J} \, \beta} \right) 
+&=\dfrac{1}{Z} \left( 16 \, e^{8 \, \text{J} \, (k \, T)^{-1}} + 32 + 16 \, e^{8 \, \text{J} \, (k \, T)^{-1}} \right) 
 \end{align}
 
 We use this result in order to calculate the susceptibility $\chi$ as
@@ -308,14 +316,21 @@ We use this result in order to calculate the susceptibility $\chi$ as
 &=\dfrac{1}{k_{B} \, T} \left( \dfrac{1}{Z} \left( 16 \, e^{8 \, \text{J} \, \beta} + 32 + 16 \, e^{8 \, \text{J} \, \beta} \right)  - 0^2 \right)
 \\
 &= 
-\dfrac{1}{k_{B} \, T \, Z} \left( 16 \, e^{8 \, \text{J} \, \beta} + 32 + 16 \, e^{8 \, \text{J} \, \beta} \right) 
+\dfrac{1}{k_{B} \, T \, Z} \left( 16 \, e^{8 \, \text{J} \, (k \, T)^{-1}} + 32 + 16 \, e^{8 \, \text{J} \, (k \, T)^{-1}} \right) 
 \end{align}
 
 
 \cite{H-Jensen}
 
-\subsection{FLOPS}
+\subsection{Numerical comparison}
 
+
+\begin{table}[h!tb]
+    \centering
+    \caption{Table of }
+    \pgfplotstabletypeset[sci, precision=4]{../code/results/mpi/Lattice_2_1000000.dat}
+\end{table}
+%columns={$T$, $E$, $C_V$, $M$, $chi$, $abs(M)$},
 
 
 

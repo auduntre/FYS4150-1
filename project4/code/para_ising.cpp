@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
   // Declare new file name and add lattice size to file name, only master node opens file
   if (RankProcess == 0) {
     string fileout = filename;
-    string argument = "_" + to_string(NSpins) + "_" + to_string(MonteCarloCycles);
+    string argument = "_" + to_string(NSpins) + "_" + to_string(MonteCarloCycles) + ".dat";
     fileout.append(argument);
     ofile.open("results/mpi/" + fileout);
   }
@@ -84,6 +84,13 @@ int main(int argc, char* argv[])
   // Start Monte Carlo sampling by looping over the selected Temperatures
   double  TimeStart, TimeEnd, TotalTime;
   TimeStart = MPI_Wtime();
+  ofile << setiosflags(ios::showpoint | ios::uppercase);
+  ofile << setw(15) << "{$T$}";
+  ofile << setw(15) << "{$E$}";
+  ofile << setw(15) << "{$C_V$}";
+  ofile << setw(15) << "{$M$}";
+  ofile << setw(15) << "{$chi$}";
+  ofile << setw(15) << "{$abs(M)$}" << endl;
   for (double Temperature = InitialTemp; Temperature <= FinalTemp; Temperature+=TempStep){
     vec LocalExpectationValues = zeros<mat>(5);
     // Start Monte Carlo computation and get local expectation values
@@ -143,7 +150,8 @@ void MetropolisSampling(int NSpins, int MonteCarloCycles, double Temperature, ve
       }
     }
     // update expectation values  for local node after a sweep through the lattice
-    ExpectationValues(0) += Energy;    ExpectationValues(1) += Energy*Energy;
+    ExpectationValues(0) += Energy;
+    ExpectationValues(1) += Energy*Energy;
     ExpectationValues(2) += MagneticMoment;
     ExpectationValues(3) += MagneticMoment*MagneticMoment;
     ExpectationValues(4) += fabs(MagneticMoment);

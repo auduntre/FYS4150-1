@@ -17,6 +17,7 @@
 #include <random>
 #include <armadillo>
 #include <string>
+#include <ctime>
 
 using namespace std;
 using namespace arma;
@@ -62,9 +63,10 @@ int main(int argc, char* argv[])
   }
   // Declare new file name and add lattice size to file name
   string fileout = filename;
-  string argument = "_" + to_string(NSpins) + "_" + to_string(MCcycles);
+  string argument = "_" + to_string(NSpins) + "_" + to_string(MCcycles) + ".dat";
   fileout.append(argument);
   ofile.open("results/nopara/" + fileout);
+  clock_t begin = clock();
   // Start Monte Carlo sampling by looping over the selected Temperatures
   for (double Temperature = InitialTemp; Temperature <= FinalTemp; Temperature += TempStep) {
     vec ExpectationValues = zeros<mat>(5);
@@ -74,6 +76,9 @@ int main(int argc, char* argv[])
     WriteResultstoFile(NSpins, MCcycles, Temperature, ExpectationValues);
   }
   ofile.close(); // close output file
+  clock_t end = clock();
+  double time = double(end - begin) / CLOCKS_PER_SEC;
+  cout << "Time elapsed: " << time << endl;
   return 0;
 // end of main program
 }
@@ -99,6 +104,7 @@ void MetropolisSampling(int NSpins, int MCcycles, double Temperature, vec &Expec
   // Start Monte Carlo cycles
   for (int cycles = 1; cycles <= MCcycles; cycles++){
       // The sweep over the lattice, looping over all spin sites
+      //for (int count = 0; count <= (NSpins*NSpins); count++) {
       for(int x = 0; x < NSpins; x++) {
           for (int y = 0; y < NSpins; y++){
             	int ix = (int) (RandomNumberGenerator(gen)*(double)NSpins);
