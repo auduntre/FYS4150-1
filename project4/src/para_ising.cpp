@@ -72,7 +72,7 @@ int main (int argc, char* argv[])
     double  TimeStart, TimeEnd, TotalTime;
     TimeStart = MPI_Wtime();
     
-    for (double Temperature = InitialTemp; Temperature <= FinalTemp; Temperature+=TempStep){
+    for (double Temperature = InitialTemp; Temperature <= FinalTemp; Temperature+=TempStep) {
         vec LocalExpectationValues = zeros<mat>(5);
         
         // Start Monte Carlo computation and get local expectation values
@@ -81,11 +81,11 @@ int main (int argc, char* argv[])
         // Find total average
         vec TotalExpectationValues = zeros<mat>(5);
         
-        for( int i =0; i < 5; i++){
+        for (int i = 0; i < 8; i++){
             MPI_Reduce(&LocalExpectationValues[i], &TotalExpectationValues[i], 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
         }
         
-        if ( RankProcess == 0) {
+        if (RankProcess == 0) {
             WriteResultstoFile(ofile, NSpins, MonteCarloCycles*NProcesses, Temperature, TotalExpectationValues);
         }
     }
