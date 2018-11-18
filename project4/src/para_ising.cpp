@@ -16,7 +16,8 @@
 */
 
 // Remember to make sure to have the right directory for YOUR system
-#include "/usr/lib/x86_64-linux-gnu/openmpi/include/mpi.h"
+/*#include "/usr/lib/x86_64-linux-gnu/openmpi/include/mpi.h"*/
+#include "mpi.h"
 #include "ising_lattice.h"
 
 using namespace  std;
