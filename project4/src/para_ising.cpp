@@ -31,8 +31,8 @@ int main (int argc, char* argv[])
     string filename;
     int NSpins, MonteCarloCycles;
     double InitialTemp, FinalTemp, TempStep;
-    int NProcesses, RankProcess;
-  
+    int NProcesses, RankProcess, NTempSteps;
+
     //  MPI initializations
     MPI_Init (&argc, &argv);
     MPI_Comm_size (MPI_COMM_WORLD, &NProcesses);
@@ -42,7 +42,7 @@ int main (int argc, char* argv[])
         cout << "Bad Usage: " << argv[0] <<
         " read output file, Number of spins, MC cycles, initial and final temperature and tempurate step" << endl;
         exit(1);
-    }
+    } 
     
     if ((RankProcess == 0) && (argc > 1)) {
         filename=argv[1];
@@ -51,6 +51,18 @@ int main (int argc, char* argv[])
         InitialTemp = atof(argv[4]);
         FinalTemp = atof(argv[5]);
         TempStep = atof(argv[6]);
+
+        // Temperature must be increasing
+        if (FinalTemp < InitialTemp) {
+            cout << "Final temperature cannot be lower than initial tempearture" << endl;
+            exit(1);
+        }
+        
+        NTempSteps = 0;
+        for (double Temp = InitialTemp; Temp < FinalTemp; Temp += TempStep) {
+            NTempSteps++;
+        }
+
     }
     
     // Declare new file name and add lattice size to file name, only master node opens file
@@ -60,6 +72,7 @@ int main (int argc, char* argv[])
         fileout.append(argument);
         ofile.open("results/mpi/" + fileout);
     }
+
   
     // broadcast to all nodes common variables since only master node reads from command line
     MPI_Bcast (&MonteCarloCycles, 1, MPI_INT, 0, MPI_COMM_WORLD);
@@ -67,11 +80,52 @@ int main (int argc, char* argv[])
     MPI_Bcast (&InitialTemp, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast (&FinalTemp, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast (&TempStep, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast (&NTempSteps, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
+    vec Temps = linspace<vec>(InitialTemp, FinalTemp, NTempSteps);
+
+    // Informing if temperature step is changed
+    if (RankProcess == 0 && (Temps[1] - Temps[0] != TempStep)) {
+        cout << "New temperature step: " << Temps[1] - Temps[0] << endl;
+    }
+
+    int rankSteps = NTempSteps / NProcesses;
+    int reminderSteps = NTempSteps % NProcesses;
+
+    int startStep;
+    int endStep;
+    int commStep;
+
+    // Divinding Temps between processes
+    if (RankProcess == NProcesses - 1) endStep = NTempSteps - 1;
+
+    if (RankProcess <= reminderSteps) {
+        startStep = (rankSteps + 1) * RankProcess;
+    }
+    else {
+        startStep = (rankSteps + 1) * reminderSteps
+                  + rankSteps * (RankProcess - reminderSteps); 
+    }
+
+    if (RankProcess > 0) {
+        commStep = startStep;
+        MPI_Send (&commStep, 1, MPI_INT, RankProcess - 1, 0,
+                  MPI_COMM_WORLD);
+    }
+
+    if (RankProcess < NProcesses - 1 && NProcesses > 1) {
+        MPI_Recv (&commStep, 1, MPI_INT, RankProcess + 1, 0, 
+                  MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        endStep = commStep - 1;
+    }
+
+    cout << "Rank: " << RankProcess << ", Start Step: " << startStep << ", End Step: " << endStep << endl;
 
     // Start Monte Carlo sampling by looping over the selected Temperatures
     double  TimeStart, TimeEnd, TotalTime;
     TimeStart = MPI_Wtime();
-    
+
+
     for (double Temperature = InitialTemp; Temperature <= FinalTemp; Temperature+=TempStep) {
         vec LocalExpectationValues = zeros<mat>(5);
         
@@ -81,19 +135,19 @@ int main (int argc, char* argv[])
         // Find total average
         vec TotalExpectationValues = zeros<mat>(5);
         
-        for (int i = 0; i < 8; i++){
+        for (int i = 0; i < 5; i++){
             MPI_Reduce(&LocalExpectationValues[i], &TotalExpectationValues[i], 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
         }
         
         if (RankProcess == 0) {
-            WriteResultstoFile(ofile, NSpins, MonteCarloCycles*NProcesses, Temperature, TotalExpectationValues);
+            WriteResultstoFile(ofile, NSpins, MonteCarloCycles * NProcesses, Temperature, TotalExpectationValues);
         }
     }
     
     if(RankProcess == 0)  ofile.close();  // close output file
     
     TimeEnd = MPI_Wtime();
-    TotalTime = TimeEnd-TimeStart;
+    TotalTime = TimeEnd - TimeStart;
     
     if ( RankProcess == 0) {
         cout << "Time = " <<  TotalTime  << " on number of processors: "  << NProcesses  << endl;
