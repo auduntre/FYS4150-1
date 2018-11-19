@@ -14,22 +14,21 @@
 using namespace std;
 using namespace arma;
 
-// output file
-ofstream ofile("/results/");
 
 int main (int argc, char* argv[])
 {
     string filename;
     int NSpins, MCcycles;
     double InitialTemp, FinalTemp, TempStep;
+
+    // output file
+    ofstream ofile("/results/");
     
     if (argc <= 5) {
         cout << "Bad Usage: " << argv[0] <<
         " read output file, Number of spins, MC cycles, intial and final temperature and temperature step" << endl;
         exit(1);
-    }
-
-    if (argc > 1) {
+    } else {
         filename = argv[1];
         NSpins = atoi(argv[2]);
         MCcycles = atoi(argv[3]);
@@ -50,8 +49,6 @@ int main (int argc, char* argv[])
         
         // Start Monte Carlo computation and get expectation values
         MetropolisSampling(NSpins, MCcycles, Temperature, ExpectationValues);
-        
-        //
         WriteResultstoFile(ofile, NSpins, MCcycles, Temperature, ExpectationValues);
     }
 
