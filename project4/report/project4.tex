@@ -10,6 +10,7 @@
 \usepackage{float}
 \usepackage{diagbox}
 \usepackage{multirow}
+\usepackage{subcaption}
 
 \usepackage{pgfplotstable, booktabs, mathpazo}
 
@@ -109,20 +110,8 @@ We give a brief introduction to the Ising model as well as phase transitions nea
 
 
 
-\subsubsection{Euler's forward algorithm}
-
-
-\subsubsection{Euler's method specific}
-
-
-
-\subsubsection{Velocity Verlet method}
-
-
-
 \subsection{Implementation}
-
-In our implementation of the abovementioned methods we use a more general scheme which allows us to implement any given formula for the acceleration. Thus we are not limited to the specified acceleration derived from circular motion, but have the opportunity to add other terms as well. 
+The code for this project is heavily based on code found in the GitHub repository \href{https://github.com/CompPhysics/ComputationalPhysics}{GitHub FYS4150} for the course FYS4150 at UiO. The . We developed our own python code for plotting selected results, by loading datafiles 
 
 
 \paragraph{}
@@ -324,13 +313,47 @@ We use this result in order to calculate the susceptibility $\chi$ as
 
 \subsection{Numerical comparison}
 
+We assume a system of $2 \times 2$ spins with periodic boundaries. We insert the temperature $T = 1$ in units $kT/\text{J}$. Thus we have $\text{J} \beta = \text{J}/(kT) = 1^{-1} = 1$. The analytic result then becomes 
+
+\begin{equation}
+\langle E \rangle = \dfrac{\text{J}}{2e^{8} + 2e^{-8} + 12} \left(-16\, e^{8} + 16 \, e^{-8} \right) = \dfrac{8\, \text{J}\left(- e^{8} + e^{-8} \right)}{e^{8} + e^{-8} + 6} \approx -7.983928 \, \text{J}
+\end{equation}
 
 \begin{table}[h!tb]
-    \centering
-    \caption{Table of }
-    \pgfplotstabletypeset[sci, precision=4]{../code/results/mpi/Lattice_2_1000000.dat}
+\centering
+\pgfplotstabletypeset[sci, precision = 4]{../code/results/mpi/datafiles/Lattice_2_10000_1.000000.dat}
 \end{table}
-%columns={$T$, $E$, $C_V$, $M$, $chi$, $abs(M)$},
+
+\begin{table}[h!tb]
+\centering
+\pgfplotstabletypeset[sci, precision = 4]{../code/results/mpi/datafiles/Lattice_2_100000_1.000000.dat}
+\end{table}
+
+\begin{table}[h!tb]
+\centering
+\pgfplotstabletypeset[sci, precision = 4]{../code/results/mpi/datafiles/Lattice_2_1000000_1.000000.dat}
+\end{table}
+
+\begin{table}[h!tb]
+\centering
+\pgfplotstabletypeset[sci, precision = 4]{../code/results/mpi/datafiles/Lattice_2_10000000_1.000000.dat}
+\end{table}
+
+
+
+
+
+
+
+%\begin{table}[h!tb]
+%    \centering
+%    \caption{Results using $10^5$, $10^6$, $10^7$, $10^8$ Monte Carlo cycles.}
+%    \pgfplotstabletypeset[sci, precision=4]{../code/results/mpi/datafiles/Lattice_2_10000_1.000000.dat}
+%	\pgfplotstabletypeset[sci, precision=4]{../code/results/mpi/datafiles/Lattice_2_100000_1.000000.dat}
+% 	\pgfplotstabletypeset[sci, precision=4]{../code/results/mpi/datafiles/Lattice_2_1000000_1.000000.dat}
+%    \pgfplotstabletypeset[sci, precision=4]{../code/results/mpi/datafiles/Lattice_2_10000000_1.000000.dat}
+%\end{table}
+
 
 
 
@@ -341,9 +364,88 @@ We use this result in order to calculate the susceptibility $\chi$ as
 
 
 
-\subsection{Perihelion precession of Mercury}
+\subsection{Numerical studies of phase transitions}
+
+We want to study the behavior of the 2D Ising model close to the critical temperature as a function of the lattice size $L \times L$. We calculate and plot the expectation values for $\langle E \rangle$ and $\langle | \mathcal{M} | \rangle$, the specific heat $C_{V}$, and the susceptibility $\chi$ as functions of $T$ for $L=40$, $L=60$, $L=80$, and $L=100$. We plot for the temperature interval $T \in [2.0, 2.4]$ with a temperature step $\Delta T = 0.05$.
 
 
+\begin{figure}[H]
+	\begin{subfigure}[t]{0.3\textwidth}
+		\includegraphics[scale=0.8]{../code/results/mpi/plots/prob_e/{Energy_40_10000_2.000000}.png}
+	\end{subfigure}
+	\\
+	\begin{subfigure}[t]{0.3\textwidth}
+		\includegraphics[scale=0.8]{../code/results/mpi/plots/prob_e/{Energy_60_10000_2.000000}.png}
+	\end{subfigure}
+		\caption{Plots of the expectation value of $\langle E \rangle$ as a function of $T$ for $L = 40, 80$. Calculated with 10 000 Monte Carlo cycles.}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{subfigure}[t]{0.51\textwidth}
+		\includegraphics[scale=0.8]{../code/results/mpi/plots/prob_e/{Energy_80_10000_2.000000}.png}
+	\end{subfigure}
+	\\
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[scale=0.8]{../code/results/mpi/plots/prob_e/{Energy_100_10000_2.000000}.png}
+	\end{subfigure}
+	\caption{Plots of the expectation value of $\langle E \rangle$ as a function of $T$ for $L = 80, 100$. Calculated with 10 000 Monte Carlo cycles.}
+\end{figure}
+
+
+\begin{figure}[H]
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Abs_Magnetization_40_10000_2.000000}.png}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Abs_Magnetization_60_10000_2.000000}.png}
+	\end{subfigure}
+\\
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Abs_Magnetization_80_10000_2.000000}.png}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Abs_Magnetization_100_10000_2.000000}.png}
+	\end{subfigure}
+		\caption{Plots of the expectation value of $\langle | \mathcal{M} | \rangle$ as a function of $T$ with $L = 40, 60, 80, 100$. Calculated for 10 000 Monte Carlo cycles.}
+\end{figure}
+
+
+\begin{figure}[H]
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Specific_Heat_40_10000_2.000000}.png}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Specific_Heat_60_10000_2.000000}.png}
+	\end{subfigure}
+\\
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Specific_Heat_80_10000_2.000000}.png}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Specific_Heat_100_10000_2.000000}.png}
+	\end{subfigure}
+		\caption{Plots of the specific heat as a function of $T$ for $L = 40, 60, 80, 100$. Calculated with 10 000 Monte Carlo cycles.}
+\end{figure}
+
+
+
+\begin{figure}[H]
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Susceptibility_40_10000_2.000000}.png}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Susceptibility_60_10000_2.000000}.png}
+	\end{subfigure}
+\\
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Susceptibility_80_10000_2.000000}.png}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Susceptibility_100_10000_2.000000}.png}
+	\end{subfigure}
+	\caption{Plots of the magnetic susceptibility as a function of $T$ for $L = 40, 60, 80, 100$. Calculated with 10 000 Monte Carlo cycles.}
+	\label{fig:susceptibility}
+\end{figure}
 
 
 \subsection{Method stability} 
