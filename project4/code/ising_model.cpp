@@ -63,9 +63,9 @@ int main(int argc, char* argv[])
   }
   // Declare new file name and add lattice size to file name
   string fileout = filename;
-  string argument = "_" + to_string(NSpins) + "_" + to_string(MCcycles) + ".dat";
+  string argument = "_" + to_string(NSpins) + "_" + to_string(MCcycles) + "_" + to_string(InitialTemp) + ".dat";
   fileout.append(argument);
-  ofile.open("results/nopara/" + fileout);
+  ofile.open("results/nopara/datafiles/" + fileout);
   clock_t begin = clock();
   // Start Monte Carlo sampling by looping over the selected Temperatures
   for (double Temperature = InitialTemp; Temperature <= FinalTemp; Temperature += TempStep) {

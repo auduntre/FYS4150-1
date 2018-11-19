@@ -70,9 +70,9 @@ int main(int argc, char* argv[])
   // Declare new file name and add lattice size to file name, only master node opens file
   if (RankProcess == 0) {
     string fileout = filename;
-    string argument = "_" + to_string(NSpins) + "_" + to_string(MonteCarloCycles) + ".dat";
+    string argument = "_" + to_string(NSpins) + "_" + to_string(MonteCarloCycles) + "_" + to_string(InitialTemp) + ".dat";
     fileout.append(argument);
-    ofile.open("results/mpi/" + fileout);
+    ofile.open("results/mpi/datafiles/" + fileout);
   }
   // broadcast to all nodes common variables since only master node reads from command line
   MPI_Bcast (&MonteCarloCycles, 1, MPI_INT, 0, MPI_COMM_WORLD);
@@ -194,9 +194,9 @@ void WriteResultstoFile(int NSpins, int MonteCarloCycles, double temperature, ve
   double MagneticSusceptibility = (M2_ExpectationValues - M_ExpectationValues*M_ExpectationValues)*AllSpins/temperature;
   ofile << setiosflags(ios::showpoint | ios::uppercase);
   ofile << setw(15) << setprecision(8) << temperature;
-  ofile << setw(15) << setprecision(8) << E_ExpectationValues*AllSpins;
+  ofile << setw(15) << setprecision(8) << E_ExpectationValues*AllSpins; // <E>/L^2
   ofile << setw(15) << setprecision(8) << HeatCapacity;
   ofile << setw(15) << setprecision(8) << M_ExpectationValues*AllSpins;
   ofile << setw(15) << setprecision(8) << MagneticSusceptibility;
-  ofile << setw(15) << setprecision(8) << Mabs_ExpectationValues*AllSpins << endl;
+  ofile << setw(15) << setprecision(8) << Mabs_ExpectationValues*AllSpins << endl; // |M|/L^2
 } // end output function
