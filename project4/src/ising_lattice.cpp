@@ -4,7 +4,8 @@ using namespace std;
 using namespace arma;
 
 
-inline int PeriodicBoundary (int i, int limit, int add) {
+inline int PeriodicBoundary (int i, int limit, int add) 
+{
     return (i+limit+add) % (limit);
 }
 
@@ -53,14 +54,14 @@ void MetropolisSampling (int NSpins, int MCcycles, double Temperature, vec &Expe
     
     // setup array for possible energy changes
     vec EnergyDifference = zeros<mat>(17);
-    for( int de =-8; de <= 8; de+=4) EnergyDifference(de+8) = exp(-de / Temperature);
+    for (int de =-8; de <= 8; de+=4) EnergyDifference(de+8) = exp(-de / Temperature);
     
     // Start Monte Carlo cycles
     for (int cycles = 1; cycles <= MCcycles; cycles++){
         // The sweep over the lattice, looping over all spin sites
         for (int xy = 0; xy < NSpins * NSpins; xy ++) {
-            int ix = (int) (RandomNumberGenerator(gen) * (double)NSpins);
-            int iy = (int) (RandomNumberGenerator(gen) * (double)NSpins);
+            int ix = (int) (RandomNumberGenerator(gen) * (double) NSpins);
+            int iy = (int) (RandomNumberGenerator(gen) * (double) NSpins);
             int deltaE = 2 * SpinMatrix(ix, iy)
                          * (SpinMatrix(ix, PeriodicBoundary(iy, NSpins, -1))
                             + SpinMatrix(PeriodicBoundary(ix, NSpins, -1), iy)
