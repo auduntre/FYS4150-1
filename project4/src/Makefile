@@ -10,6 +10,7 @@ CC = mpic++
 COMPILER = g++
 
 CFLAGS = -I$(IDIR) -std=c++11 -Wall -larmadillo -O3
+CLINKFLAGS = -Wall -O3
 
 _DEPS = ising_lattice.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
@@ -17,7 +18,7 @@ DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 _OBJ = ising_lattice.o ising_model.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-_MPIOBJ = ising_lattice.o Para_ising.o
+_MPIOBJ = ising_lattice.o para_ising.o 
 MPIOBJ = $(patsubst %,$(MPIODIR)/%,$(_MPIOBJ))
 
 
@@ -28,14 +29,14 @@ $(MPIODIR)/%.o: %.cpp $(DEPS)
 		$(CC) -c -o $@ $< $(CFLAGS)
 
 
-all: Para_ising ising_model
+all: para_ising ising_model
 
-Para_ising: $(MPIOBJ)
-		$(CC) -o $@ $^ $(CFLAGS)
+para_ising: $(MPIOBJ)
+		$(CC) -o $@ $^ $(CLINKFLAGS)
 
-ising_model: $(OBJ)
-		$(COMPILER) -o $@ $^ $(CFLAGS)
+ising_model: $(OBJ) 
+		$(COMPILER) -o $@ $^ $(CLINKFLAGS) 
 
 
 clean:
-		rm -rf $(ODIR)/*.o $(MPIODIR)/*.o ising_model Para_ising
+		rm -rf $(ODIR)/*.o $(MPIODIR)/*.o ising_model para_ising 
