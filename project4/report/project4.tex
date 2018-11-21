@@ -68,15 +68,10 @@ citecolor=blue]{hyperref}
 
 
 \section{Abstract}
-We give a brief introduction to the Ising model in 1 and 2 dimensions, as well as Monte Carlo integration. and how we can discretize such equations in order to solve them using computer algorithms. We then introduce the most important equations we meet in our project, namely Newton's law of gravitation, and Newton's second law of motion on differential form. In table \ref{PlanetMass} we present the masses and distance from the Sun of all the planets in our solar system. We choose to scale our equations in such a way that the mass of the Sun is $M_{\odot}\overset{\text{def}}{=} 1$, and as such we also need the masses of the planets given in the same unit.
-
-
-\paragraph{}
-We find an analytical expression for the escape velocity needed for a planet to escape the gravitational pull of the Sun, $v_{e} = 2\sqrt{2} \, \pi$. We then present plots of Mercury's perihelion precession and how Mercury's orbit around the Sun is affected by general relativity.
-
+We give a brief introduction to the Ising model in 1 and 2 dimensions, as well as Monte Carlo integration. We derive the analytic equations for the expected mean energy, mean magnetization, specific heat and magnetic susceptibility, for the simple case of a system of $2 \times 2$ $(L=2)$ spins. We compare the analytic result with our numerical solutions. 
 
 \paragraph{}
-The rest of our results can be found in the GitHub repository linked in the implementation section. 
+We study the number of Monte Carlo cycles needed in order to reach equilibrium states, as well as how the number of Monte Carlo cycles affect the expected mean energy and mean magnetization. We present plots of the expected mean energy per spin, mean magnetization, specific heat, and magnetic susceptibility as functions of $T$, for $L = 40, 60, 80, 100$. The plots indicates that a phase transition happens in the interval $kT/\text{J} \in [2.25, 2.30]$. This fits well with the known theory where $kT_{C}/\text{J} \approx 2.269$.  
 
 \section{Introduction}
 In this project we will study the Ising model in two dimensions as a model of phase transitions. At a given critical temperature, this model exhibits a phase transition from a magnetic phase to a phase with zero magnetization. This is a so-called binary system where each object on the lattice can only take two values. In our system we will use spins that either point up or down. We can for example choose to associate spins pointing up with 1, and spins pointing down with 0. 
@@ -85,7 +80,7 @@ In this project we will study the Ising model in two dimensions as a model of ph
 In it's simplest form the energy of the Ising model is expressed as, without an externally applied magnetic field,
 
 \begin{equation}
-E = -J \sum^N_{<kl>} s_{k} s_{l},
+E = -\text{J} \sum^N_{<kl>} s_{k} s_{l},
 \end{equation}
 
 with $s_{k}=\pm 1$. $N$ is the total number of spins in our system and $J$ is a coupling constant expressing the strength of the interaction between neighboring spins. The symbol $<kl>$ indicates that we sum over the nearest neighbors only. For non-neighboring spins the interaction is so weak that we often can ignore this contribution. We also assume that we have ferromagnetic ordering in our system, by assuming $J> 0$. For this project we'll use periodic boundary conditions and the Metropolis algorithm.
@@ -99,23 +94,33 @@ We give a brief introduction to the Ising model as well as phase transitions nea
 \section{Methods}
 
 
-
-
-\subsection{Monte Carlo}
-
-
-
 \subsection{Ising model}
+We won't go deep into the details of the Ising model, but we will give a brief introduction of the basics. For those interested in the specific details of the Ising model and statistical physics we will cite some relevant literature.
 
+
+\paragraph{}
+In statistical physics an ensemble is a very important underlying part for defining thermodynamical quantities. And ensemble is a collection of microphysics systems from which we derive expectation values and thermodynamical properties related to experiments. In our project we base our calculations on the Canonical ensemble, which is one of the most used ensembles. For the Ising model the energy is in its simplest form given as 
+
+\begin{equation}
+E = -\text{J} \sum^N_{<kl>} s_{k} s_{l} - \mathcal{B} \sum^N_{k} s_{k},
+\end{equation}
+
+where $s_{k}= \pm 1$, $N$ is the total number of spins, $\text{J}$ is the coupling constant and $\mathcal{B}$ is an external magnetic field interacting with the magnetic moment created by the spins. The symbol $<kl>$ indicates that we sum over nearest neighbors only. For our system we will take $\mathcal{B}$ to be zero. We also assume $\text{J}>0$ which is energetically favorable to aligning spins. We will present more details on other important aspects of the Ising model and the canonical ensemble in the results section where we derive analytical results for a system of $2 \times 2$ spins. 
+
+\paragraph{}
+A goal of our project is to determine whether a phase transition is taking place. A phase transition is marked by abrupt macroscopic changes as external parameters are changed, such as an increase in temperature. The point at which the phase transition takes place is called a critical point. The Ising model exhibits what is known as a second-order phase transition since the heat capacity diverges. What this actually means is that below a given critical temperature $T_{C}$, the Ising model exhibits spontaneous magnetization with $\langle \mathcal{M} \rangle \neq 0$. Above $T_{C}$ the average magnetization is zero. The mean magnetization approaches zero at $T_{C}$ with an infinite slope. Such behavior is an example of what is called a critical phenomena. \cite{statphys}
+
+\subsection{Monte Carlo method}
+The Monte Carlo method is the basis for the code implemented in this project. 
 
 
 
 \subsection{Implementation}
-The code for this project is heavily based on code found in the GitHub repository \href{https://github.com/CompPhysics/ComputationalPhysics}{GitHub FYS4150} for the course FYS4150 at UiO. The . We developed our own python code for plotting selected results, by loading datafiles 
+The code for this project is heavily based on code found in the GitHub repository \href{https://github.com/CompPhysics/ComputationalPhysics}{GitHub FYS4150} for the course FYS4150 at UiO. We developed our own python code for plotting selected results. The Metropolis algorithm with the use of Monte Carlo cycles is explained in the lecture notes on statistical physics by Hjort-Jensen, on page 12 and onwards. \cite{statphys}
 
 
 \paragraph{}
-All our code, calculations, and plots used can be found in \href{https://github.com/auduntre/FYS4150/tree/master/Project%203}{Auduns GitHub repository}.
+All our code, calculations, and plots used can be found in \href{https://github.com/MariusHolm/FYS4150}{my GitHub repository}.
 
 \section{Results}
 
@@ -188,7 +193,7 @@ where the sum extends over all microstates $M$.
 With periodic boundary conditions the energy for a given configuration $i$ is given by
 
 \begin{equation}
-E_{i} = \sum^N_{j=1} s_{j} s_{j+1}. 
+E_{i} = - \text{J} \sum^N_{<kl>} s_{k} s_{l}. 
 \end{equation}
 
 For details on the calculations and more theoretical background please see. \cite{H-Jensen}
@@ -319,25 +324,57 @@ We assume a system of $2 \times 2$ spins with periodic boundaries. We insert the
 \langle E \rangle = \dfrac{\text{J}}{2e^{8} + 2e^{-8} + 12} \left(-16\, e^{8} + 16 \, e^{-8} \right) = \dfrac{8\, \text{J}\left(- e^{8} + e^{-8} \right)}{e^{8} + e^{-8} + 6} \approx -7.983928 \, \text{J}
 \end{equation}
 
+The expectation value for the mean energy per spin is then
+
+\begin{equation}
+\dfrac{\langle E \rangle}{\text{J}} \approx -1.995982
+\end{equation}
+
+
+
 \begin{table}[h!tb]
 \centering
-\pgfplotstabletypeset[sci, precision = 4]{../code/results/mpi/datafiles/Lattice_2_10000_1.000000.dat}
+\pgfplotstabletypeset[sci, precision = 5]{../code/results/mpi/datafiles/Lattice_2_1000_1.000000.dat}
+\caption{Numerical results for a system with $L=2$ with 1000 Monte Carlo cycles.}
 \end{table}
 
 \begin{table}[h!tb]
 \centering
-\pgfplotstabletypeset[sci, precision = 4]{../code/results/mpi/datafiles/Lattice_2_100000_1.000000.dat}
+\pgfplotstabletypeset[sci, precision = 5]{../code/src/opt_results/opt_mpi/results_2_10000_0.990000.dat}
+\caption{Numerical results for a system with $L=2$ with 10 000 Monte Carlo cycles.}
 \end{table}
 
 \begin{table}[h!tb]
 \centering
-\pgfplotstabletypeset[sci, precision = 4]{../code/results/mpi/datafiles/Lattice_2_1000000_1.000000.dat}
+\pgfplotstabletypeset[sci, precision = 5]{../code/src/opt_results/opt_mpi/results_2_100000_0.990000.dat}
+\caption{Numerical results for a system with $L=2$ with 100 000 Monte Carlo cycles.}
 \end{table}
 
 \begin{table}[h!tb]
 \centering
-\pgfplotstabletypeset[sci, precision = 4]{../code/results/mpi/datafiles/Lattice_2_10000000_1.000000.dat}
+\pgfplotstabletypeset[sci, precision = 5]{../code/src/opt_results/opt_mpi/results_2_1000000_0.990000.dat}
+\caption{Numerical results for a system with $L=2$ with 1 000 000 Monte Carlo cycles.}
 \end{table}
+
+\begin{table}[h!tb]
+\centering
+\pgfplotstabletypeset[sci, precision = 5]{../code/src/opt_results/opt_mpi/results_2_10000000_0.990000.dat}
+\caption{Numerical results for a system with $L=2$ with 10 000 000 Monte Carlo cycles.}
+\end{table}
+
+\begin{table}[h!tb]
+\centering
+\pgfplotstabletypeset[sci, precision = 5]{../code/src/opt_results/opt_mpi/results_2_100000000_0.990000.dat}
+\caption{Numerical results for a system with $L=2$ with 100 000 000 Monte Carlo cycles.}
+\end{table}
+
+
+
+\subsection{Equilibrium situations}
+
+
+
+
 
 
 
@@ -357,11 +394,6 @@ We assume a system of $2 \times 2$ spins with periodic boundaries. We insert the
 
 
 
-\subsection{Escape velocity}
-
-
-
-
 
 
 \subsection{Numerical studies of phase transitions}
@@ -370,82 +402,84 @@ We want to study the behavior of the 2D Ising model close to the critical temper
 
 
 \begin{figure}[H]
-	\begin{subfigure}[t]{0.3\textwidth}
-		\includegraphics[scale=0.8]{../code/results/mpi/plots/prob_e/{Energy_40_10000_2.000000}.png}
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[scale=0.4]{../code/src/opt_results/opt_mpi/plots/prob_e/{Energy_40_100000_2.000000}.png}
 	\end{subfigure}
-	\\
-	\begin{subfigure}[t]{0.3\textwidth}
-		\includegraphics[scale=0.8]{../code/results/mpi/plots/prob_e/{Energy_60_10000_2.000000}.png}
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[scale=0.4]{../code/src/opt_results/opt_mpi/plots/prob_e/{Energy_60_100000_2.000000}.png}
 	\end{subfigure}
-		\caption{Plots of the expectation value of $\langle E \rangle$ as a function of $T$ for $L = 40, 80$. Calculated with 10 000 Monte Carlo cycles.}
+		\caption{Plots of the expectation value of $\langle E \rangle$ as a function of $T$ for $L = 40, 60$. Calculated with 100 000 Monte Carlo cycles.}
 \end{figure}
 
 \begin{figure}[H]
-	\begin{subfigure}[t]{0.51\textwidth}
-		\includegraphics[scale=0.8]{../code/results/mpi/plots/prob_e/{Energy_80_10000_2.000000}.png}
-	\end{subfigure}
-	\\
 	\begin{subfigure}[t]{0.5\textwidth}
-		\includegraphics[scale=0.8]{../code/results/mpi/plots/prob_e/{Energy_100_10000_2.000000}.png}
+		\includegraphics[scale=0.4]{../code/src/opt_results/opt_mpi/plots/prob_e/{Energy_80_100000_2.000000}.png}
 	\end{subfigure}
-	\caption{Plots of the expectation value of $\langle E \rangle$ as a function of $T$ for $L = 80, 100$. Calculated with 10 000 Monte Carlo cycles.}
+	\begin{subfigure}[t]{0.5\textwidth}
+		\includegraphics[scale=0.4]{../code/src/opt_results/opt_mpi/plots/prob_e/{Energy_100_100000_2.000000}.png}
+	\end{subfigure}
+	\caption{Plots of the expectation value of $\langle E \rangle$ as a function of $T$ for $L = 80, 100$. Calculated with 100 000 Monte Carlo cycles.}
 \end{figure}
 
 
 \begin{figure}[H]
 	\begin{subfigure}[t]{0.5\textwidth}
-		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Abs_Magnetization_40_10000_2.000000}.png}
+		\includegraphics[scale=0.4]{../code/src/opt_results/opt_mpi/plots/prob_e/{Abs_Magnetization_40_100000_2.000000}.png}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.5\textwidth}
-		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Abs_Magnetization_60_10000_2.000000}.png}
+		\includegraphics[scale=0.4]{../code/src/opt_results/opt_mpi/plots/prob_e/{Abs_Magnetization_60_100000_2.000000}.png}
 	\end{subfigure}
 \\
 	\begin{subfigure}[t]{0.5\textwidth}
-		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Abs_Magnetization_80_10000_2.000000}.png}
+		\includegraphics[scale=0.4]{../code/src/opt_results/opt_mpi/plots/prob_e/{Abs_Magnetization_80_100000_2.000000}.png}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.5\textwidth}
-		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Abs_Magnetization_100_10000_2.000000}.png}
+		\includegraphics[scale=0.4]{../code/src/opt_results/opt_mpi/plots/prob_e/{Abs_Magnetization_100_100000_2.000000}.png}
 	\end{subfigure}
-		\caption{Plots of the expectation value of $\langle | \mathcal{M} | \rangle$ as a function of $T$ with $L = 40, 60, 80, 100$. Calculated for 10 000 Monte Carlo cycles.}
+		\caption{Plots of the expectation value of $\langle | \mathcal{M} | \rangle$ as a function of $T$ with $L = 40, 60, 80, 100$. Calculated for 100 000 Monte Carlo cycles.}
+		\label{fig:absmag}
 \end{figure}
 
 
 \begin{figure}[H]
 	\begin{subfigure}[t]{0.5\textwidth}
-		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Specific_Heat_40_10000_2.000000}.png}
+		\includegraphics[scale=0.4]{../code/src/opt_results/opt_mpi/plots/prob_e/{Specific_Heat_40_100000_2.000000}.png}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.5\textwidth}
-		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Specific_Heat_60_10000_2.000000}.png}
+		\includegraphics[scale=0.4]{../code/src/opt_results/opt_mpi/plots/prob_e/{Specific_Heat_60_100000_2.000000}.png}
 	\end{subfigure}
 \\
 	\begin{subfigure}[t]{0.5\textwidth}
-		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Specific_Heat_80_10000_2.000000}.png}
+		\includegraphics[scale=0.4]{../code/src/opt_results/opt_mpi/plots/prob_e/{Specific_Heat_80_100000_2.000000}.png}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.5\textwidth}
-		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Specific_Heat_100_10000_2.000000}.png}
+		\includegraphics[scale=0.4]{../code/src/opt_results/opt_mpi/plots/prob_e/{Specific_Heat_100_100000_2.000000}.png}
 	\end{subfigure}
-		\caption{Plots of the specific heat as a function of $T$ for $L = 40, 60, 80, 100$. Calculated with 10 000 Monte Carlo cycles.}
+		\caption{Plots of the specific heat as a function of $T$ for $L = 40, 60, 80, 100$. Calculated with 100 000 Monte Carlo cycles.}
+		\label{fig:specific}
 \end{figure}
 
 
 
 \begin{figure}[H]
 	\begin{subfigure}[t]{0.5\textwidth}
-		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Susceptibility_40_10000_2.000000}.png}
+		\includegraphics[scale=0.4]{../code/src/opt_results/opt_mpi/plots/prob_e/{Susceptibility_40_100000_2.000000}.png}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.5\textwidth}
-		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Susceptibility_60_10000_2.000000}.png}
+		\includegraphics[scale=0.4]{../code/src/opt_results/opt_mpi/plots/prob_e/{Susceptibility_60_100000_2.000000}.png}
 	\end{subfigure}
 \\
 	\begin{subfigure}[t]{0.5\textwidth}
-		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Susceptibility_80_10000_2.000000}.png}
+		\includegraphics[scale=0.4]{../code/src/opt_results/opt_mpi/plots/prob_e/{Susceptibility_80_100000_2.000000}.png}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.5\textwidth}
-		\includegraphics[scale=0.4]{../code/results/mpi/plots/prob_e/{Susceptibility_100_10000_2.000000}.png}
+		\includegraphics[scale=0.4]{../code/src/opt_results/opt_mpi/plots/prob_e/{Susceptibility_100_100000_2.000000}.png}
 	\end{subfigure}
-	\caption{Plots of the magnetic susceptibility as a function of $T$ for $L = 40, 60, 80, 100$. Calculated with 10 000 Monte Carlo cycles.}
+	\caption{Plots of the magnetic susceptibility as a function of $T$ for $L = 40, 60, 80, 100$. Calculated with 100 000 Monte Carlo cycles.}
 	\label{fig:susceptibility}
 \end{figure}
+
+From the plots above we see that there is obviously some drastic changes in our system for $T \in [2.2, 2.4]$. The changes are clearly most visible in the plots of absolute magnetism, specific heat, and the magnetic susceptibility. These first plots were found using data with temperature steps $\Delta T = 0.05$, in order to be more computationally efficient when we looked at the bigger interval of $T \in [2.0, 2.4]$. We now take a closer look at the smaller interval, and we now use a temperature step of $\Delta T = 0.01$.
 
 
 \subsection{Method stability} 
@@ -466,7 +500,7 @@ As we can see from figures \ref{fig:Verlet} and \ref{fig:Euler}, we can achieve 
 
 \section{Conclusions}
 
-The results found using numerical methods with general relativity correction terms fit very well with known theory. We did not have the time to expand our code to a full solar system with all the planets, which would have been interesting to look at given we had more time.
+We found that our numerical method approximates the analytical results for the Ising model for a $2 \times 2$ quite well. The mean energy results are correct to the third decimal for 1000 Monte Carlo cycles. The accuracy improves when we increase the number of cycles, and for $10^8$ cycles we are starting to get very close to the analytical result.
 
 
 
