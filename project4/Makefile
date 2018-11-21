@@ -2,8 +2,9 @@
 # or: make ising_para
 # typing "make" in terminal compiles both (same as: make all)
 
-IDIR = ../include
-ODIR = ../build
+IDIR = include
+ODIR = build
+SDIR = src
 MPIODIR = $(ODIR)/mpi
 
 CC = mpic++
@@ -22,10 +23,10 @@ _MPIOBJ = ising_lattice.o para_ising.o
 MPIOBJ = $(patsubst %,$(MPIODIR)/%,$(_MPIOBJ))
 
 
-$(ODIR)/%.o: %.cpp $(DEPS)
+$(ODIR)/%.o: $(SDIR)/%.cpp $(DEPS)
 		$(COMPILER) -c -o $@ $< $(CFLAGS)
 
-$(MPIODIR)/%.o: %.cpp $(DEPS)
+$(MPIODIR)/%.o: $(SDIR)/%.cpp $(DEPS)
 		$(CC) -c -o $@ $< $(CFLAGS)
 
 
