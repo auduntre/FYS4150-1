@@ -68,7 +68,7 @@ void MetropolisSampling (int NSpins, int MCcycles, double Temperature, vec &Expe
             	            + SpinMatrix(ix, PeriodicBoundary(iy, NSpins, 1))
             	            + SpinMatrix(PeriodicBoundary(ix, NSpins, 1), iy));
 
-            if ( RandomNumberGenerator(gen) <= EnergyDifference(deltaE + 8) ) {
+            if (RandomNumberGenerator(gen) <= EnergyDifference(deltaE + 8)) {
               	SpinMatrix(ix,iy) *= -1.0;  // flip one spin and accept new spin config
               	MagneticMoment += (double) (2.0 * SpinMatrix(ix, iy));
               	Energy += (double) deltaE;

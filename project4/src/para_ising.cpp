@@ -52,13 +52,14 @@ int main (int argc, char* argv[])
         TempStep = atof(argv[6]);
 
         // Temperature must be increasing
-        if (FinalTemp < InitialTemp) {
-            cout << "Final temperature cannot be lower than initial tempearture" << endl;
+        if (FinalTemp < InitialTemp + TempStep) {
+            cout << "Final temperature cannot be lower than initial tempearture"
+                 << " + temperature step" << endl;
             exit(1);
         }
         
-        NTempSteps = 0;
-        for (double Temp = InitialTemp; Temp < FinalTemp; Temp += TempStep) {
+        NTempSteps = 1;
+        for (double Temp = InitialTemp + TempStep; Temp <= FinalTemp; Temp += TempStep) {
             NTempSteps++;
         }
     }
