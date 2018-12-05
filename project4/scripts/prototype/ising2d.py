@@ -43,6 +43,7 @@ def monteCarlo(temp, size, trials, game=False, method=1):
     spin_matrix = np.zeros((size,size), np.int8) + 1
 
     #Create and initialize variables
+    Energies = np.zeros(trials) # stroing all the energies
     E = M = 0
     E_av = E2_av = M_av = M2_av = Mabs_av = 0
 
@@ -78,6 +79,7 @@ def monteCarlo(temp, size, trials, game=False, method=1):
                 E += deltaE
 
         #Update expectation values
+        Energies[i] = E
         E_av    += E
         E2_av   += E**2
         M_av    += M
@@ -96,11 +98,12 @@ def monteCarlo(temp, size, trials, game=False, method=1):
     E_variance  = (E2_av - E_av * E_av) / (fsize2 *  temp * temp)
     M_variance  = (M2_av - M_av * M_av) / (fsize2 * temp)
     #Normalize returned averages to per-point
+    Energies   /= fsize2
     E_av       /= fsize2
     M_av       /= fsize2
     Mabs_av    /= fsize2
 
-    return (E_av, E_variance, M_av, M_variance, Mabs_av)
+    return (E_av, E_variance, Energies, M_av, M_variance, Mabs_av)
 
 
 @jit(nopython=True, parallel=True)
@@ -111,15 +114,19 @@ def temp_loop (temps, size, trials):
     heatcapacity = np.zeros(Dim)
     temperature = np.zeros(Dim)
     magnetization = np.zeros(Dim)
-    
+    All_Energies = np.zeros((Dim, trials))
+
     for i in prange(Dim):
-        (E_av, E_variance, M_av, _, _) = monteCarlo(temps[i], size, trials)
+        (E_av, E_variance, Energies, M_av, M_variance, Mabs_av) = \
+                monteCarlo(temps[i], size, trials)
+        
         temperature[i] = temps[i]
+        All_Energies[i, :] = Energies[:]
         energy[i] = E_av
         heatcapacity[i] = E_variance
         magnetization[i] = M_av
 
-    return (energy, heatcapacity, temperature, magnetization)
+    return (energy, heatcapacity, All_Energies, temperature, magnetization)
 
 
 def main():
@@ -128,13 +135,14 @@ def main():
     # values of the lattice, number of Monte Carlo cycles and temperature domain
     size        = 20
     trials      = 100000
-    temp_init   = 1.8
+    temp_init   = 1.0
     temp_end    = 2.6
-    temp_step   = 0.01
+    temp_step   = 0.05
 
 
     temps = np.arange(temp_init, temp_end+temp_step/2, temp_step, float)
-    (energy, heatcapacity, temperature, magnetization) = temp_loop(temps, size, trials)
+    (energy, heatcapacity, _, temperature, magnetization) = \
+            temp_loop(temps, size, trials)
     
     plt.figure(1)
     
